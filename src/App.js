@@ -1,30 +1,35 @@
 
 import './App.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
-function App() {
+const App=() =>{
   const [post, setPost]= useState([])
   const [loading, setLoading]=useState();
+  const [error, setError]=useState()
+  useEffect(()=>{
+    fetch("https://jsonplaceholder.typicode.com/posts")
+    .then(res=>res.json())
+    .then(res=>{
+      const post = res.filter(post=>post.userId==1)
+              setPost(post)
+              console.log(post)
+              
+    
+            
   
-  fetch("https://jsonplaceholder.typicode.com/posts")
-  .then(res=>res.json())
-  .then(res=>{
-    const user = res.filter(post=>post.userId==1)
-               .map((user, index)=>(
-                console.log(user)
-               ))
-   console.log(user);
-          
-
-  })
-  .catch(error=>{
-    console.log(error)
-  })
+    })
+    .catch(error=>{
+      console.log(error)
+    })
+  },[])
+  
 
   return (
     <div className="App">
-      {loading ? "loading":posts}
-      {error? error:null}
+     { post.map((post, index)=>(
+                 JSON.stringify(post)
+               ))
+        }
     </div>
   );
 }
